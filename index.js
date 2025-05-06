@@ -77,11 +77,15 @@ app.post('/upload', upload.single('file'), async (req, res) => {
       customName: name
     });
     await file.save();
+
+  
     res.status(201).json({ message: 'File uploaded successfully', file });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+
 
 app.get('/files', async (req, res) => {
   try {
@@ -95,15 +99,13 @@ app.get('/files', async (req, res) => {
 
 app.get('/files/:name', async (req, res) => {
   try {
-    const { filename } = req.params;
-    if (filename.includes('..') || filename.includes('/')) {
-      return res.status(400).json({ error: 'Invalid filename.' });
-    }
-    const file = await File.findOne({ filename });
+    const { name } = req.params;
+    
+    const file = await File.findOne({ customName: name });
     if (!file) {
       return res.status(404).json({ error: 'File not found.' });
     }
-    const filePath = path.join(__dirname, 'uploads', filename);
+    const filePath = path.join(__dirname, 'uploads', file.filename);
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'File not found on disk.' });
     }
