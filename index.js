@@ -97,15 +97,15 @@ app.get('/files', async (req, res) => {
 });
 
 
-app.get('/files/:name', async (req, res) => {
+app.get('/files/:originalName', async (req, res) => {
   try {
-    const { name } = req.params;
+    const { originalName } = req.params;
     
-    const file = await File.findOne({ customName: name });
+    const file = await File.findOne({ customName: originalName });
     if (!file) {
       return res.status(404).json({ error: 'File not found.' });
     }
-    const filePath = path.join(__dirname, 'uploads', file.filename);
+    const filePath = path.join(__dirname, 'uploads', file.originalName);
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'File not found on disk.' });
     }
