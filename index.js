@@ -6,14 +6,19 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 
 mongoose.connect('mongodb://localhost:27017/tera-logic', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+
 
 const fileSchema = new mongoose.Schema({
   originalName: String,
